@@ -1,4 +1,4 @@
-import { LADDER, MAX_RUNG, RTP, WIRE_COUNT } from '../game/math';
+import { LADDER, MAX_RUNG, RTP, WIRE_COUNT, tipFraction } from '../game/math';
 import { formatMultiplier } from '../game/money';
 import { Modal } from './Modal';
 
@@ -58,13 +58,13 @@ export function RulesModal({ onClose }: { onClose: () => void }) {
           <tr>
             <td>Tip cost</td>
             {[6, 5, 4, 3, 2].map((n) => (
-              <td key={n}>{Math.round(100 / (n - 1))}%</td>
+              <td key={n}>{(tipFraction(WIRE_COUNT - n) * 100).toFixed(1)}%</td>
             ))}
           </tr>
         </tbody>
       </table>
       <p className="muted">
-        The tip is priced fairly, so the return to player is {(RTP * 100).toFixed(2)}% with or without it. Keyboard: <kbd>1</kbd>–
+        The tip costs what the extra rung is worth, so the return to player is {(RTP * 100).toFixed(2)}% with or without it. Keyboard: <kbd>1</kbd>–
         <kbd>6</kbd> cut, <kbd>Space</kbd> bet / cash out, <kbd>T</kbd> tip.
       </p>
     </Modal>

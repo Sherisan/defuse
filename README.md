@@ -23,8 +23,9 @@ npm run build
 Multiplier = floor(0.97 × 6 / (6 − k), 2 dp). See `src/game/math.ts`.
 
 **Bomb Squad Tip**: once per round, it reveals a safe wire, which counts as a
-cleared rung. Its price is `bet / (liveWires − 1)` (20% → 25% → 33% → 50% → 100%),
-which is the fair value of a free rung, so RTP stays at 97% whenever it's used.
+cleared rung. At rung k it costs `(m(k+1) − m(k)) / 0.97 × bet`, rounded up to the cent
+(16.5% → 29.9% → 50.5% → 100% → 300% of the bet): the value of a free rung divided by the RTP,
+so every rand spent on the tip returns 97% whenever it's bought.
 
 ## Provably fair
 

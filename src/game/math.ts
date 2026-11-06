@@ -26,13 +26,17 @@ export function payoutFor(bet: number, rung: number): number {
   return roundMoney(bet * multiplierFor(rung));
 }
 
+/** Tip price as a fraction of the bet at this rung: 16.5%, 29.9%, 50.5%, 100%, 300%. */
+export function tipFraction(rung: number): number {
+  return (multiplierFor(rung + 1) - multiplierFor(rung)) / RTP;
+}
+
 /**
- * Tip price. The tip removes one safe wire and moves the player up one rung for free.
- * With n live wires left that is worth bet / (n - 1), so this is what it costs: 20% at the
- * start, rising to 25%, 33%, 50% and 100% as the bomb gets hotter. Charging the fair price
- * means a round with the tip returns the same 97% as a round without it, whenever it's used.
+ * Tip price. The tip removes one safe wire and moves the player up one rung for free. At rung k the
+ * player's position is worth multiplierFor(k) × bet (cashing out and playing on are worth the same
+ * on a fair ladder), so the free rung is worth (m(k+1) − m(k)) × bet. Charging that ÷ RTP means
+ * every rand spent on the tip returns 97%, whenever it's bought. Rounded up to the cent.
  */
 export function tipCost(bet: number, rung: number): number {
-  const liveWires = WIRE_COUNT - rung;
-  return Math.ceil((bet * 100) / (liveWires - 1) - 1e-9) / 100;
+  return Math.ceil(bet * tipFraction(rung) * 100 - 1e-9) / 100;
 }
